@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare CDSS — Clinical Decision Support</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <div>
+                        <h1>Healthcare CDSS</h1>
+                        <p class="subtitle">AI-Powered Clinical Decision Support</p>
+                    </div>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connected</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <main class="chat-area" id="chatArea">
+            <!-- Welcome Message -->
+            <div class="message assistant" id="welcomeMsg">
+                <div class="message-avatar">🏥</div>
+                <div class="message-content">
+                    <div class="message-text">
+                        <p>Hello! I'm your <strong>Clinical Decision Support System</strong>.</p>
+                        <p>I can help you understand symptoms, potential conditions, treatment options, medication safety, and recommended next steps.</p>
+                        <div class="quick-prompts">
+                            <p class="quick-label">Try asking about:</p>
+                            <div class="quick-buttons">
+                                <button class="quick-btn" data-prompt="I've had a headache and fever for 2 days, with some body aches. What could this be?">Fever & headache</button>
+                                <button class="quick-btn" data-prompt="I have persistent heartburn after meals, especially at night. What should I do?">Heartburn</button>
+                                <button class="quick-btn" data-prompt="I'm experiencing shortness of breath and chest tightness, especially when exercising.">Breathing issues</button>
+                                <button class="quick-btn" data-prompt="I feel tired all the time and have been gaining weight despite eating less.">Fatigue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <footer class="input-area">
+            <div class="input-container">
+                <textarea
+                    id="messageInput"
+                    placeholder="Describe your symptoms or health concern..."
+                    rows="1"
+                    autocomplete="off"
+                ></textarea>
+                <button id="sendBtn" class="send-btn" title="Send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <p class="disclaimer-text">
+                ⚕️ This tool is for educational purposes only and does not replace professional medical advice.
+            </p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

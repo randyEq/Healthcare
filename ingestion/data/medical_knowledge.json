@@ -1,0 +1,162 @@
+[
+  {
+    "id": "doc_001",
+    "condition": "Common Cold (Upper Respiratory Infection)",
+    "category": "respiratory",
+    "content": "The common cold is a viral infection of the upper respiratory tract. Symptoms include runny or stuffy nose, sore throat, cough, mild headache, sneezing, low-grade fever (below 100.4°F/38°C), and mild body aches. Onset is gradual over 1-3 days. Duration is typically 7-10 days. Treatment is supportive: rest, hydration, over-the-counter decongestants and pain relievers (acetaminophen or ibuprofen). Antibiotics are NOT effective. Cost-effective treatment: generic acetaminophen ($2-5), saline nasal spray ($3-6), rest and fluids (free). Seek medical attention if symptoms persist beyond 10 days, fever exceeds 102°F, or severe headache develops. Red flag: difficulty breathing, chest pain, or confusion require immediate care.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_002",
+    "condition": "Influenza (Flu)",
+    "category": "respiratory",
+    "content": "Influenza is a viral respiratory infection caused by influenza viruses. Symptoms have ABRUPT onset and include high fever (100-104°F), chills, muscle aches, headache, fatigue, dry cough, sore throat, and nasal congestion. Unlike the common cold, flu onset is sudden and fever is higher. Duration is typically 5-7 days. Treatment includes rest, hydration, and antiviral medications (oseltamivir/Tamiflu) if started within 48 hours of onset. Cost-effective treatment: rest and fluids (free), generic acetaminophen or ibuprofen ($2-5), oseltamivir ($50-135 if high-risk). Annual flu vaccine is the best prevention. Seek immediate care for: difficulty breathing, persistent chest pain, sudden dizziness, confusion, severe vomiting, or symptoms that improve then return with fever.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_003",
+    "condition": "Hypertension (High Blood Pressure)",
+    "category": "cardiovascular",
+    "content": "Hypertension is persistently elevated blood pressure (≥130/80 mmHg). Often asymptomatic ('silent killer'), but may cause headaches, dizziness, blurred vision, shortness of breath, and nosebleeds in severe cases. Risk factors: family history, obesity, high sodium diet, stress, smoking, excessive alcohol, and sedentary lifestyle. Treatment: lifestyle modifications (DASH diet, exercise, weight loss, sodium restriction) as first-line. Medications include ACE inhibitors (lisinopril), ARBs (losartan), calcium channel blockers (amlodipine), and diuretics (hydrochlorothiazide). Cost-effective options: generic lisinopril ($4-10/month), generic hydrochlorothiazide ($4-10/month), lifestyle changes (free). Drug interactions: NSAIDs can reduce antihypertensive effectiveness. Monitor blood pressure regularly. Red flags: blood pressure ≥180/120 with symptoms (hypertensive crisis) — seek immediate care.",
+    "severity": "moderate",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_004",
+    "condition": "Type 2 Diabetes Mellitus",
+    "category": "endocrine",
+    "content": "Type 2 diabetes is a chronic metabolic condition characterized by insulin resistance and high blood sugar. Symptoms include excessive thirst (polydipsia), frequent urination (polyuria), unexplained weight loss, increased hunger (polyphagia), fatigue, blurred vision, slow-healing wounds, and tingling in hands/feet. Diagnosis: fasting glucose ≥126 mg/dL, HbA1c ≥6.5%, or random glucose ≥200 mg/dL with symptoms. Treatment: lifestyle modification (Mediterranean or low-carb diet, regular exercise, weight management) as foundation. First-line medication: metformin (generic, $4-15/month). Other options: GLP-1 agonists (semaglutide, $800-1000/month), SGLT2 inhibitors (empagliflozin, $400-600/month), sulfonylureas (glipizide, $4-15/month). Cost-effective approach: metformin + lifestyle changes. Monitor: HbA1c every 3-6 months, annual eye and foot exams. Red flags: diabetic ketoacidosis (DKA) — fruity breath, nausea, vomiting, rapid breathing, confusion — requires emergency care.",
+    "severity": "moderate",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_005",
+    "condition": "Gastroesophageal Reflux Disease (GERD)",
+    "category": "gastrointestinal",
+    "content": "GERD is chronic acid reflux where stomach acid flows back into the esophagus. Symptoms include heartburn (burning sensation in chest, worse after eating or lying down), regurgitation of food or sour liquid, difficulty swallowing, chronic cough, hoarseness, and sensation of lump in throat. Trigger foods: spicy, fatty, or fried foods, citrus, chocolate, caffeine, alcohol, and peppermint. Treatment: lifestyle changes (avoid triggers, eat smaller meals, don't lie down within 3 hours of eating, elevate head of bed, weight loss) as first-line. Medications: antacids (Tums, $3-8), H2 blockers (famotidine/Pepcid, generic $4-12/month), proton pump inhibitors (omeprazole, generic $5-20/month). Cost-effective approach: lifestyle changes + generic omeprazole. Drug interactions: PPIs can reduce absorption of certain medications. Long-term PPI use risks: B12 deficiency, osteoporosis, increased infection risk. Red flags: difficulty swallowing solids, weight loss, vomiting blood, black stools — may indicate serious conditions.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_006",
+    "condition": "Migraine Headache",
+    "category": "neurological",
+    "content": "Migraine is a neurological condition causing severe, often debilitating headaches. Symptoms include throbbing or pulsating pain (usually one-sided), lasting 4-72 hours, accompanied by nausea, vomiting, and sensitivity to light and sound. Some patients experience aura (visual disturbances like flashing lights, blind spots) before onset. Triggers: stress, hormonal changes, certain foods (aged cheese, MSG, nitrates), alcohol, changes in sleep, and weather. Treatment: acute treatment with triptans (sumatriptan, generic $12-30/dose), NSAIDs (ibuprofen, $2-5), acetaminophen ($2-5). Preventive: beta-blockers (propranolol), anticonvulsants (topiramate), CGRP inhibitors (erenumab, $500-700/month). Cost-effective approach: generic sumatriptan or ibuprofen + rest in dark, quiet room. Lifestyle: identify and avoid triggers, regular sleep, hydration. Red flags (thunderclap headache, worst headache of life, fever with stiff neck, weakness, confusion) require immediate emergency evaluation for stroke or meningitis.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_007",
+    "condition": "Acute Bronchitis",
+    "category": "respiratory",
+    "content": "Acute bronchitis is inflammation of the bronchial tubes, usually following a viral upper respiratory infection. Symptoms include persistent cough (dry then productive), chest discomfort, mild fever, fatigue, and wheezing. Cough can last 3 weeks or longer. Diagnosis is clinical; chest X-ray usually normal. Treatment is primarily supportive: rest, hydration, humidified air, cough suppressants (dextromethorphan, $3-7) for dry cough, expectorants (guaifenesin, $4-8) for productive cough, and NSAIDs for discomfort. Antibiotics are NOT indicated for viral bronchitis (over-prescription is a major concern). Cost-effective treatment: rest, fluids, generic cough medication. Pulmonary rehabilitation or breathing exercises can help. Seek care if: cough lasts >3 weeks, fever >101°F, shortness of breath, coughing up blood, or underlying lung/heart disease.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_008",
+    "condition": "Anxiety Disorder",
+    "category": "mental_health",
+    "content": "Anxiety disorders involve excessive, persistent worry that interferes with daily life. Symptoms include restlessness, feeling on edge, fatigue, difficulty concentrating, irritability, muscle tension, sleep disturbances, and physical symptoms like rapid heartbeat, sweating, trembling, shortness of breath, and gastrointestinal distress. Panic attacks are sudden episodes of intense fear with physical symptoms. Treatment: first-line is cognitive-behavioral therapy (CBT). Medications: SSRIs (sertraline/Zoloft, generic $4-15/month; escitalopram, generic $4-15/month), SNRIs (venlafaxine, generic $4-20/month). Short-term: benzodiazepines (alprazolam, generic $4-12/month) — use with caution due to dependence risk. Cost-effective approach: generic SSRI + CBT (online/app-based CBT like CBT Companion is free or low-cost). Lifestyle: regular exercise, mindfulness/meditation, limiting caffeine and alcohol. Drug interactions: SSRIs + MAOIs = dangerous. Red flags: suicidal thoughts, inability to function, severe panic — seek immediate help.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_009",
+    "condition": "Urinary Tract Infection (UTI)",
+    "category": "urological",
+    "content": "UTI is an infection in any part of the urinary system, most commonly the bladder. Symptoms include strong, persistent urge to urinate, burning sensation during urination (dysuria), passing small amounts of urine frequently, cloudy or strong-smelling urine, pelvic pain in women, and occasionally low-grade fever. More common in women due to shorter urethra. Diagnosis: urinalysis and urine culture. Treatment: antibiotics. First-line: nitrofurantoin (generic $12-30/5-day course), trimethoprim-sulfamethoxazole (generic $4-12/3-day course), or fosfomycin ($30-50 single dose). Cost-effective: generic trimethoprim-sulfamethoxazole. Symptom relief: phenazopyridine (Pyridium, $8-15) for urinary pain. Prevention: drink plenty of water, urinate after intercourse, wipe front to back. Drug interactions: nitrofurantoin reduced by probenecid. Red flags: high fever, chills, back/flank pain, nausea/vomiting — may indicate kidney infection (pyelonephritis) requiring urgent care. Recurrent UTIs (≥3/year) need urological evaluation.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_010",
+    "condition": "Osteoarthritis",
+    "category": "musculoskeletal",
+    "content": "Osteoarthritis is the most common form of arthritis, involving degeneration of joint cartilage and underlying bone. Symptoms include joint pain (worse with activity, better with rest), stiffness (especially morning or after inactivity, usually <30 min), swelling, reduced range of motion, and crepitus (grinding sensation). Most commonly affects knees, hips, hands, and spine. Risk factors: age, obesity, previous joint injury, repetitive use, genetics. Treatment: first-line is lifestyle — weight management, low-impact exercise (swimming, cycling), physical therapy, and joint protection techniques. Medications: acetaminophen (first-line pharmacologic, $2-5/month), topical NSAIDs (diclofenac gel, $10-25), oral NSAIDs (ibuprofen, naproxen — $3-10/month). Intra-articular injections: corticosteroids ($100-300/injection), hyaluronic acid ($800-1500/course). Surgery: joint replacement ($30,000-50,000+ for severe cases). Cost-effective approach: weight loss + low-impact exercise + generic acetaminophen or NSAIDs + PT. Drug interactions: NSAIDs increase bleeding risk with anticoagulants, reduce kidney function. Red flags: sudden severe joint pain, inability to bear weight, signs of infection (redness, heat, fever).",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_011",
+    "condition": "Asthma",
+    "category": "respiratory",
+    "content": "Asthma is a chronic inflammatory airway disease characterized by recurrent, reversible airflow obstruction. Symptoms include wheezing, shortness of breath, chest tightness, and coughing (especially at night or early morning). Triggers: allergens (dust mites, pollen, pet dander), respiratory infections, exercise, cold air, air pollution, stress, and certain medications (beta-blockers, NSAIDs in aspirin-sensitive asthma). Diagnosis: spirometry showing reversible obstruction. Treatment: controller medications (inhaled corticosteroids — fluticasone, generic $20-50/month) and rescue medications (short-acting beta-agonists — albuterol, generic $15-40/inhaler). Step-up therapy: ICS/LABA combinations (fluticasone/salmeterol, generic $50-150/month). Biologics for severe asthma ($25,000-50,000/year). Cost-effective approach: generic fluticasone + albuterol with spacer, avoid triggers. Asthma action plan is essential. Drug interactions: beta-blockers can worsen asthma. Red flags: severe shortness of breath, inability to speak full sentences, lips/face turning blue, peak flow <50% of personal best — asthma attack requiring emergency care. Use reliever (albuterol) every 20 min x3 and go to ER.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_012",
+    "condition": "Streptococcal Pharyngitis (Strep Throat)",
+    "category": "respiratory",
+    "content": "Strep throat is a bacterial throat infection caused by Group A Streptococcus. Symptoms include sudden onset sore throat, pain with swallowing, fever >101°F, red and swollen tonsils (often with white patches), swollen lymph nodes in neck, and absence of cough (distinguishing from viral). Unlike viral pharyngitis, strep typically does NOT cause cough, runny nose, or hoarseness. Diagnosis: rapid strep test or throat culture. Treatment: antibiotics — first-line penicillin V (generic $5-15) or amoxicillin (generic $4-12). For penicillin-allergic patients: azithromycin (generic $10-25) or clindamycin (generic $12-30). Cost-effective approach: generic amoxicillin for 10 days. Symptom relief: acetaminophen/ibuprofen, warm salt water gargles, throat lozenges. Untreated strep can lead to complications: rheumatic fever (heart damage), glomerulonephritis (kidney), peritonsillar abscess. Complete the full antibiotic course even if feeling better. Red flags: difficulty breathing, inability to swallow saliva (drooling), severe neck swelling — may indicate peritonsillar abscess requiring urgent evaluation.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_013",
+    "condition": "Iron Deficiency Anemia",
+    "category": "hematology",
+    "content": "Iron deficiency anemia is decreased hemoglobin due to insufficient iron. Symptoms include fatigue, weakness, pale skin, shortness of breath, dizziness, headaches, cold hands/feet, brittle nails, and unusual cravings (pica — craving for ice, dirt). In severe cases: chest pain, fast heartbeat. Common causes: inadequate dietary iron, blood loss (menstruation, GI bleeding), pregnancy, poor absorption. Diagnosis: CBC showing low hemoglobin, low MCV (microcytic), low ferritin (<30 ng/mL). Treatment: oral iron supplementation — ferrous sulfate (generic $3-10/month), ferrous gluconate. Take with vitamin C to enhance absorption. Avoid taking with calcium, tea, coffee (reduce absorption). Dietary sources: red meat, leafy greens, beans, fortified cereals. Cost-effective approach: generic ferrous sulfate 325mg daily. IV iron for severe cases or malabsorption ($300-1000/course). Treatment duration: 3-6 months to replenish stores. Red flags: chest pain, severe weakness, signs of GI bleeding (black stools) require evaluation for underlying cause. Women with heavy menstrual bleeding should be evaluated.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_014",
+    "condition": "Gastroenteritis (Stomach Flu)",
+    "category": "gastrointestinal",
+    "content": "Gastroenteritis is inflammation of the stomach and intestines, usually viral (norovirus, rotavirus) or bacterial (Salmonella, E. coli). Symptoms include diarrhea (watery, 3+ times/day), nausea, vomiting, abdominal cramps, low-grade fever, muscle aches, and headache. Onset is typically 12-72 hours after exposure. Duration is usually 1-3 days for viral, up to a week for bacterial. Treatment is supportive: ORAL REHYDRATION is the most important intervention. Oral rehydration solution (ORS — Pedialyte $6-12, or homemade: 1L water + 6 tsp sugar + 1/2 tsp salt). BRAT diet (bananas, rice, applesauce, toast) as tolerated. Medications: loperamide (Imodium, $4-10) for non-bloody diarrhea in adults, ondansetron (generic $8-20) for nausea. Antibiotics are NOT indicated for viral gastroenteritis. Cost-effective approach: homemade ORS + BRAT diet + rest. Avoid dairy, caffeine, fatty foods, and spicy foods until recovered. Red flags: signs of dehydration (excessive thirst, dry mouth, little/no urination, dizziness, dark urine), high fever (>102°F), bloody stools, severe abdominal pain, symptoms >5 days — require medical evaluation. Children and elderly are at highest risk for dehydration.",
+    "severity": "moderate",
+    "urgency": "urgent"
+  },
+  {
+    "id": "doc_015",
+    "condition": "Hypothyroidism",
+    "category": "endocrine",
+    "content": "Hypothyroidism is an underactive thyroid gland producing insufficient thyroid hormone. Symptoms develop gradually: fatigue, weight gain (despite normal/decreased appetite), cold intolerance, dry skin and hair, hair loss, constipation, muscle weakness, depression, memory problems, slowed heart rate, and elevated cholesterol. In severe cases: goiter (neck swelling). Common cause: Hashimoto's thyroiditis (autoimmune). Diagnosis: elevated TSH (>4.0 mIU/L) with low free T4. Treatment: levothyroxine (Synthroid, generic $4-15/month) — synthetic thyroid hormone replacement. Dose adjusted based on TSH levels, checked 6-8 weeks after starting or dose change. Cost-effective treatment: generic levothyroxine, taken on empty stomach 30-60 min before breakfast. Drug interactions: take separately from calcium supplements, iron supplements, and antacids (reduce absorption). Consistency: take same brand/generic for consistent results. Monitoring: TSH annually once stable, more frequently if symptoms change or during pregnancy. Red flags: extreme fatigue, hypothermia, slow breathing, confusion, coma (myxedema coma — rare but life-threatening) — emergency.",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_016",
+    "condition": "Pneumonia",
+    "category": "respiratory",
+    "content": "Pneumonia is infection and inflammation of the lung tissue (alveoli). Can be bacterial (Streptococcus pneumoniae most common), viral, or fungal. Symptoms include cough (often productive with yellow/green/rust-colored sputum), fever (can be high, 102-105°F), chills, shortness of breath, chest pain (worsens with breathing/coughing), rapid breathing, fatigue, and confusion (especially in elderly). Diagnosis: chest X-ray showing consolidation, blood tests, sputum culture. Treatment depends on cause: bacterial pneumonia treated with antibiotics — first-line for community-acquired: azithromycin (generic $10-25) or doxycycline (generic $4-12) for healthy adults; amoxicillin (generic $4-12) for those with comorbidities. Hospitalization required for severe cases. Cost-effective outpatient approach: generic doxycycline or amoxicillin for 5-7 days. Vaccination: pneumococcal vaccine (PCV13/PPSV23) recommended for adults ≥65 and high-risk groups. Red flags: severe shortness of breath, chest pain, confusion, bluish lips, persistent high fever despite antibiotics, low blood pressure — require emergency evaluation. CURB-65 score helps determine need for hospitalization.",
+    "severity": "severe",
+    "urgency": "emergency"
+  },
+  {
+    "id": "doc_017",
+    "condition": "Allergic Rhinitis (Hay Fever)",
+    "category": "allergy",
+    "content": "Allergic rhinitis is an allergic response to airborne allergens (pollen, dust mites, pet dander, mold). Symptoms include sneezing, runny or stuffy nose (clear discharge), itchy eyes/nose/throat, watery eyes, and fatigue. Seasonal (spring/fall) or perennial (year-round). Unlike cold symptoms, allergies do NOT cause fever and can persist as long as exposure continues. Diagnosis: clinical history, allergy testing (skin prick, IgE blood test). Treatment: intranasal corticosteroids are most effective — fluticasone (Flonase, generic $10-20/month), budesonide (Rhinocort, generic $10-20/month). Oral antihistamines: second-generation (cetirizine/Zyrtec, loratadine/Claritin, fexofenadine/Allegra — generic $4-15/month) are non-drowsy. First-generation (diphenhydramine/Benadryl) causes drowsiness. Eye drops: olopatadine (Pataday, $12-25). Cost-effective approach: generic loratadine or cetirizine + generic fluticasone nasal spray. Allergen avoidance: HEPA filters, keeping windows closed during high pollen, dust mite covers. Immunotherapy (allergy shots/sublingual) for refractory cases ($1000-4000/year). Red flags: wheezing, shortness of breath (may indicate progression to asthma), facial pain/pressure (possible sinusitis).",
+    "severity": "mild",
+    "urgency": "routine"
+  },
+  {
+    "id": "doc_018",
+    "condition": "Coronary Artery Disease and Angina",
+    "category": "cardiovascular",
+    "content": "Coronary artery disease (CAD) is narrowing of coronary arteries by atherosclerotic plaques, reducing blood flow to heart muscle. Angina (chest pain) is the cardinal symptom: pressure, squeezing, or pain in chest, typically brought on by exertion or stress, relieved by rest. Pain may radiate to left arm, jaw, neck, or back. Associated symptoms: shortness of breath, sweating, nausea, fatigue. Risk factors: smoking, hypertension, diabetes, high cholesterol, family history, obesity, sedentary lifestyle, age (men >45, women >55). Diagnosis: ECG, stress test, coronary angiography (gold standard). Treatment: lifestyle (smoking cessation, heart-healthy diet, exercise, weight management) is foundational. Medications: aspirin (81mg, generic $2-5/month), statins (atorvastatin, generic $4-15/month), beta-blockers (metoprolol, generic $4-12/month), ACE inhibitors (lisinopril, generic $4-10/month), nitroglycerin for acute angina ($10-30). Cost-effective approach: generic aspirin + atorvastatin + metoprolol + lisinopril + lifestyle changes. Procedures: stenting (PCI, $25,000-50,000) or bypass surgery (CABG, $70,000-200,000) for severe cases. Drug interactions: multiple cardiac meds require careful monitoring. RED FLAGS: chest pain at rest, severe crushing chest pain, pain not relieved by nitroglycerin, associated with sweating/nausea/shortness of breath — SUSPECT HEART ATTACK (MI), call 911 immediately. Time is muscle.",
+    "severity": "severe",
+    "urgency": "emergency"
+  },
+  {
+    "id": "doc_019",
+    "condition": "Stroke (Cerebrovascular Accident)",
+    "category": "neurological",
+    "content": "Stroke is a life-threatening medical emergency caused by interrupted blood flow to the brain (ischemic, 87%) or bleeding into the brain (hemorrhagic, 13%). Use FAST to recognize: F=Face drooping (one side), A=Arm weakness (cannot raise both arms), S=Speech difficulty (slurred, cannot repeat simple sentence), T=Time to call 911 immediately. Other symptoms: sudden numbness or weakness (especially one side of body), sudden confusion, sudden trouble seeing (one or both eyes), sudden trouble walking, dizziness, loss of balance, sudden severe headache with no known cause (hemorrhagic). Risk factors: hypertension (most important), atrial fibrillation, smoking, diabetes, high cholesterol, obesity, previous TIA. Diagnosis: CT scan (rule out hemorrhage), MRI. Treatment: ischemic stroke — IV thrombolysis (tPA/alteplase within 4.5 hours of symptom onset), mechanical thrombectomy (within 6-24 hours for large vessel occlusion). Hemorrhagic — blood pressure control, surgery for some cases. Prevention: control blood pressure, statins, anticoagulation for atrial fibrillation, antiplatelet therapy (aspirin, clopidogrel). THIS IS ALWAYS AN EMERGENCY. Every minute of delay = 1.9 million neurons lost. Do NOT wait to see if symptoms improve. Do NOT drive yourself — call 911. Treatment is time-critical.",
+    "severity": "severe",
+    "urgency": "emergency"
+  },
+  {
+    "id": "doc_020",
+    "content": "Drug Interaction: Warfarin",
+    "category": "medication_safety",
+    "content": "Warfarin is an oral anticoouagulant (blood thinner) requiring careful monitoring and management due to extensive drug interactions. INR (International Normalized Ratio) must be monitored regularly (target 2.0-3.0 for most conditions). MAJOR DRUG INTERACTIONS: Antibiotics — ciprofloxacin, metronidazole, erythromycin, trimethoprim-sulfamethoxazole SIGNIFICANTLY increase warfarin levels (risk of bleeding). NSAIDs (ibuprofen, naproxen, aspirin) increase bleeding risk — AVOID. Statins — simvastatin can increase INR. Antifungals — fluconazole, miconazole increase warfarin effect. Amiodarone markedly increases INR. FOOD INTERACTIONS: Vitamin K-rich foods (spinach, kale, broccoli, Brussels sprouts) can reduce warfarin effect — maintain CONSISTENT intake, don't eliminate. Cranberry juice can increase INR. Alcohol increases INR and bleeding risk. MONITORING: INR more frequently when starting/stopping any new medication. PATIENT EDUCATION: watch for signs of bleeding — unusual bruising, nosebleeds, bleeding gums, blood in urine/stool, severe headache. Reversal agent: Vitamin K (oral or IV) and, for emergencies, fresh frozen plasma or prothrombin complex concentrate. Cost-effective alternative: DOACs (rivaroxaban, apixaban) — more expensive ($400-550/month) but no INR monitoring required and fewer interactions. Warfarin generic: $4-15/month.",
+    "severity": "severe",
+    "urgency": "routine"
+  }
+]

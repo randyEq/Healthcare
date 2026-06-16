@@ -1,0 +1,45 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vector DB (rebuilt by ingestion pipeline)
+vector_db/*.faiss
+vector_db/*.pkl
+
+# Uploaded documents (large PDFs, etc.)
+ingestion/documents/*
+!ingestion/documents/README.txt
+
+# Screenshots / test artifacts
+*.png
+.playwright-mcp/
+
+# Model cache
+.cache/
