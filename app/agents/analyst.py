@@ -1,40 +1,39 @@
 """Cost-Effective Analysis Agent — treatment evaluation, medication safety, risk assessment."""
+
 from __future__ import annotations
 
 import json
 
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage
 from loguru import logger
 
 from app.config import settings
 from app.graph.state import CDSSState
 from app.prompts import get_analyst_prompt
+from app.agents.llm_provider import get_chat_llm
 
 
 class CostEffectiveAgent:
     """Reviews diagnoses, evaluates cost-effective treatments, checks medication safety, assesses risk."""
 
     def __init__(self) -> None:
-        self.llm = ChatOpenAI(
-            model=settings.llm_model_name,
-            api_key=settings.openai_api_key,
-            base_url=settings.openai_base_url,
-            temperature=0.2,
-        )
+        self.llm = get_chat_llm(temperature=0.2)
         self.prompt = get_analyst_prompt()
 
     async def run(self, state: CDSSState) -> CDSSState:
         """Execute cost-effectiveness analysis and risk evaluation."""
         # Build the RAG assessment summary for the analyst
-        rag_assessment = json.dumps({
-            "primary_assessment": state.get("primary_assessment", ""),
-            "differential_diagnoses": state.get("differential_diagnoses", []),
-            "symptom_analysis": state.get("symptom_analysis", ""),
-            "severity": state.get("severity", ""),
-            "urgency": state.get("urgency", ""),
-            "clinical_findings": state.get("clinical_findings", []),
-        }, indent=2)
+        rag_assessment = json.dumps(
+            {
+                "primary_assessment": state.get("primary_assessment", ""),
+                "differential_diagnoses": state.get("differential_diagnoses", []),
+                "symptom_analysis": state.get("symptom_analysis", ""),
+                "severity": state.get("severity", ""),
+                "urgency": state.get("urgency", ""),
+                "clinical_findings": state.get("clinical_findings", []),
+            },
+            indent=2,
+        )
 
         patient_context = (
             f"Current complaint: {state.get('user_input', '')}\n"
@@ -44,10 +43,17 @@ class CostEffectiveAgent:
         logger.info("[Analyst] Starting cost-effectiveness and risk analysis...")
 
         chain = self.prompt | self.llm
-        response: AIMessage = await chain.ainvoke({
-            "rag_assessment": rag_assessment,
-            "patient_context": patient_context,
-        })
+        response: AIMessage = await chain.ainvoke(
+            {
+                "rag_assessment": rag_assessment,
+                "patient_context": patient_context,
+            },
+            config={
+                "run_name": "cost_effective_analysis",
+                "tags": ["healthcare_cdss", "analyst"],
+                "metadata": {"session_id": state.get("session_id", "")},
+            },
+        )
 
         raw = response.content.strip()
         if raw.startswith("```"):
@@ -61,7 +67,11 @@ class CostEffectiveAgent:
             parsed = {
                 "diagnosis_review": raw[:500],
                 "treatment_options": [],
-                "medication_safety": {"interactions": [], "contraindications": [], "warnings": []},
+                "medication_safety": {
+                    "interactions": [],
+                    "contraindications": [],
+                    "warnings": [],
+                },
                 "risk_assessment": {
                     "overall_risk": "moderate",
                     "emergency_signs": [],

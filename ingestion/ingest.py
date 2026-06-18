@@ -116,7 +116,9 @@ def chunk_documents(documents: list[Document]) -> list[Document]:
         separators=["\n\n", "\n", ". ", " ", ""],
     )
     chunks = splitter.split_documents(documents)
-    logger.info(f"[Ingest] Chunked {len(documents)} documents into {len(chunks)} chunks")
+    logger.info(
+        f"[Ingest] Chunked {len(documents)} documents into {len(chunks)} chunks"
+    )
     return chunks
 
 
@@ -165,7 +167,9 @@ def verify_index() -> bool:
         )
         # Test a query
         results = store.similarity_search("headache fever", k=3)
-        logger.info(f"[Verify] ✅ Index loaded successfully — {len(results)} test results returned")
+        logger.info(
+            f"[Verify] ✅ Index loaded successfully — {len(results)} test results returned"
+        )
         for i, doc in enumerate(results, 1):
             condition = doc.metadata.get("condition", "unknown")
             logger.info(f"[Verify]   [{i}] {condition}")
@@ -176,10 +180,16 @@ def verify_index() -> bool:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="FAISS Ingestion Pipeline for Healthcare CDSS")
+    parser = argparse.ArgumentParser(
+        description="FAISS Ingestion Pipeline for Healthcare CDSS"
+    )
     parser.add_argument("--dir", type=str, help="Directory of documents to ingest")
-    parser.add_argument("--verify", action="store_true", help="Verify the existing index")
-    parser.add_argument("--data", type=str, default=None, help="Specific JSON data file")
+    parser.add_argument(
+        "--verify", action="store_true", help="Verify the existing index"
+    )
+    parser.add_argument(
+        "--data", type=str, default=None, help="Specific JSON data file"
+    )
     args = parser.parse_args()
 
     logger.info("=" * 60)

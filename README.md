@@ -22,24 +22,24 @@ User Input → Planner Agent → [Insufficient Info?]
 
 ### Agents
 
-| Agent | Role |
-|---|---|
-| **Planner Agent** | Analyzes user input, checks info completeness (0-100 score), generates follow-up questions if needed |
+| Agent                             | Role                                                                                                            |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Planner Agent**                 | Analyzes user input, checks info completeness (0-100 score), generates follow-up questions if needed            |
 | **RAG Agent (Patient/Diagnosis)** | Retrieves medical knowledge from FAISS vector DB, performs clinical reasoning, generates differential diagnoses |
-| **Cost-Effective Analysis Agent** | Evaluates treatment cost-effectiveness, medication safety, drug interactions, risk assessment |
-| **Summary Agent** | Consolidates all findings into structured patient-friendly markdown response |
+| **Cost-Effective Analysis Agent** | Evaluates treatment cost-effectiveness, medication safety, drug interactions, risk assessment                   |
+| **Summary Agent**                 | Consolidates all findings into structured patient-friendly markdown response                                    |
 
 ## 🛠️ Tech Stack
 
-| Component | Technology |
-|---|---|
-| **Framework** | LangGraph, LangChain |
-| **LLM** | Llama-3.1-8B-Instruct via HuggingFace Router |
+| Component      | Technology                                           |
+| -------------- | ---------------------------------------------------- |
+| **Framework**  | LangGraph, LangChain                                 |
+| **LLM**        | Llama-3.1-8B-Instruct via HuggingFace Router         |
 | **Embeddings** | sentence-transformers/all-MiniLM-L6-v2 (local, free) |
-| **Vector DB** | FAISS (local persistent storage) |
-| **Web Server** | FastAPI + Uvicorn |
-| **Real-time** | WebSocket |
-| **Frontend** | HTML, CSS, Vanilla JS |
+| **Vector DB**  | FAISS (local persistent storage)                     |
+| **Web Server** | FastAPI + Uvicorn                                    |
+| **Real-time**  | WebSocket                                            |
+| **Frontend**   | HTML, CSS, Vanilla JS                                |
 
 ## 📂 Project Structure
 
@@ -82,23 +82,27 @@ healthcare-cdss/
 ## 🚀 Setup & Installation
 
 ### 1. Clone the repo
+
 ```bash
 git clone https://github.com/gajulasaikumar/healthcare.git
 cd healthcare
 ```
 
 ### 2. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Configure environment
+
 ```bash
 cp .env.example .env
 # Edit .env with your actual API keys
 ```
 
 ### 4. Build the FAISS index (ingestion pipeline)
+
 ```bash
 # Ingest the built-in sample medical knowledge
 python -m ingestion.ingest
@@ -111,6 +115,7 @@ python -m ingestion.ingest --verify
 ```
 
 ### 5. Run the server
+
 ```bash
 python run.py
 ```
@@ -138,15 +143,32 @@ python -m pytest tests/test_agents.py -v
 
 All configuration is via environment variables (`.env` file):
 
-| Variable | Description | Default |
-|---|---|---|
-| `OPENAI_API_KEY` | HuggingFace API key | — |
-| `OPENAI_BASE_URL` | LLM endpoint URL | `https://router.huggingface.co/v1` |
-| `LLM_MODEL_NAME` | LLM model name | `meta-llama/Llama-3.1-8B-Instruct:novita` |
-| `EMBEDDING_MODEL_NAME` | Embedding model | `sentence-transformers/all-MiniLM-L6-v2` |
-| `FAISS_INDEX_PATH` | Path to FAISS index | `/workspace/vector_db` |
-| `APP_HOST` | Server host | `0.0.0.0` |
-| `APP_PORT` | Server port | `8000` |
+| Variable               | Description         | Default                                   |
+| ---------------------- | ------------------- | ----------------------------------------- |
+| `OPENAI_API_KEY`       | HuggingFace API key | —                                         |
+| `OPENAI_BASE_URL`      | LLM endpoint URL    | `https://router.huggingface.co/v1`        |
+| `LLM_MODEL_NAME`       | LLM model name      | `meta-llama/Llama-3.1-8B-Instruct:novita` |
+| `EMBEDDING_MODEL_NAME` | Embedding model     | `sentence-transformers/all-MiniLM-L6-v2`  |
+| `FAISS_INDEX_PATH`     | Path to FAISS index | `/workspace/vector_db`                    |
+| `APP_HOST`             | Server host         | `0.0.0.0`                                 |
+| `APP_PORT`             | Server port         | `8000`                                    |
+| `LANGSMITH_TRACING`    | Enable LangSmith monitoring | `false`                         |
+| `LANGSMITH_API_KEY`    | LangSmith API key   | -                                         |
+| `LANGSMITH_PROJECT`    | LangSmith project name | `healthcare-cdss`                      |
+| `LANGSMITH_ENDPOINT`   | LangSmith API endpoint | `https://api.smith.langchain.com`      |
+
+### LangSmith Monitoring
+
+To trace LangGraph/LangChain runs in LangSmith, add these values to `.env`:
+
+```env
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=your_langsmith_api_key
+LANGSMITH_PROJECT=healthcare-cdss
+```
+
+Restart the server after changing `.env`. Startup logs will show whether
+LangSmith is enabled and which project is being used.
 
 ## ⚕️ Disclaimer
 

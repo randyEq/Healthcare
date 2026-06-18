@@ -3,6 +3,7 @@
 Uses HuggingFace sentence-transformers for local embeddings (no API cost)
 and FAISS for fast vector similarity search.
 """
+
 from __future__ import annotations
 
 from pathlib import Path

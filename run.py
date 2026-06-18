@@ -12,8 +12,15 @@ def main() -> None:
     logger.info(f"  Host:  {settings.app_host}")
     logger.info(f"  Port:  {settings.app_port}")
     logger.info(f"  Env:   {settings.app_env}")
-    logger.info(f"  LLM:   {settings.llm_model_name} @ {settings.openai_base_url}")
+    llm_base = settings.openai_base_url or "OpenAI default endpoint"
+    logger.info(f"  LLM:   {settings.llm_model_name} @ {llm_base}")
     logger.info(f"  FAISS: {settings.faiss_index_path}")
+    logger.info(
+        "  LangSmith: {} project={} api_key_set={}",
+        "enabled" if settings.langsmith_tracing else "disabled",
+        settings.langsmith_project,
+        bool(settings.langsmith_api_key),
+    )
     logger.info("=" * 60)
 
     uvicorn.run(

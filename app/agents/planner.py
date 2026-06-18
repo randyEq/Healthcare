@@ -1,43 +1,61 @@
 """Planner Agent — analyzes user input, checks info sufficiency, generates follow-up questions."""
+
 from __future__ import annotations
 
 import json
 
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage
 from loguru import logger
 
 from app.config import settings
 from app.graph.state import CDSSState
 from app.prompts import get_planner_prompt
+from app.agents.llm_provider import get_chat_llm
 
 
 class PlannerAgent:
     """The Planner Agent evaluates whether enough information is available."""
 
     def __init__(self) -> None:
-        self.llm = ChatOpenAI(
-            model=settings.llm_model_name,
-            api_key=settings.openai_api_key,
-            base_url=settings.openai_base_url,
-            temperature=0.3,
-        )
+        self.llm = get_chat_llm(temperature=0.3)
         self.prompt = get_planner_prompt()
 
     async def run(self, state: CDSSState) -> CDSSState:
         """Execute the planner analysis."""
         user_input = state.get("user_input", "")
-        conversation_history = state.get("conversation_history", "(no prior conversation)")
+        conversation_history = state.get(
+            "conversation_history", "(no prior conversation)"
+        )
 
         logger.info(f"[Planner] Analyzing input: {user_input[:80]}...")
 
         chain = self.prompt | self.llm
-        response: AIMessage = await chain.ainvoke({
-            "conversation_history": conversation_history,
-            "user_input": user_input,
-        })
+        try:
+            response: AIMessage = await chain.ainvoke(
+                {
+                    "conversation_history": conversation_history,
+                    "user_input": user_input,
+                },
+                config={
+                    "run_name": "planner_assessment",
+                    "tags": ["healthcare_cdss", "planner"],
+                    "metadata": {"session_id": state.get("session_id", "")},
+                },
+            )
+            raw = response.content.strip()
+        except Exception as e:
+            # Log and fall back to a safe default so the app can continue
+            logger.error(f"[Planner] LLM error: {e}")
+            raw = json.dumps(
+                {
+                    "is_sufficient": True,
+                    "completeness_score": 50,
+                    "analysis_summary": "The language model is currently unavailable. Please check your API key and LLM configuration.",
+                    "follow_up_questions": [],
+                    "next_action": "proceed",
+                }
+            )
 
-        raw = response.content.strip()
         # Strip markdown code fences if present
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1] if "\n" in raw else raw

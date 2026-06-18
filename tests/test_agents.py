@@ -1,4 +1,5 @@
 """Unit tests for CDSS agents with mocked LLM responses."""
+
 import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -10,25 +11,29 @@ from app.graph.state import CDSSState
 # Planner Agent Tests
 # ──────────────────────────────────────────────
 
+
 @pytest.mark.asyncio
 async def test_planner_sufficient_input():
     """Planner should detect when enough information is provided."""
     mock_response = MagicMock()
-    mock_response.content = json.dumps({
-        "is_sufficient": True,
-        "completeness_score": 85,
-        "analysis_summary": "User reports fever and sore throat for 3 days.",
-        "follow_up_questions": [],
-        "next_action": "proceed",
-    })
+    mock_response.content = json.dumps(
+        {
+            "is_sufficient": True,
+            "completeness_score": 85,
+            "analysis_summary": "User reports fever and sore throat for 3 days.",
+            "follow_up_questions": [],
+            "next_action": "proceed",
+        }
+    )
 
-    with patch("app.agents.planner.ChatOpenAI") as MockLLM:
+    with patch("app.agents.planner.get_chat_llm") as MockLLM:
         mock_llm = MockLLM.return_value
         mock_chain = MagicMock()
         mock_chain.ainvoke = AsyncMock(return_value=mock_response)
         mock_llm.__or__ = MagicMock(return_value=mock_chain)
 
         from app.agents.planner import PlannerAgent
+
         agent = PlannerAgent()
         agent.llm = mock_llm
         agent.prompt = MagicMock()
@@ -50,22 +55,25 @@ async def test_planner_sufficient_input():
 async def test_planner_insufficient_input():
     """Planner should detect when more info is needed and generate follow-up questions."""
     mock_response = MagicMock()
-    mock_response.content = json.dumps({
-        "is_sufficient": False,
-        "completeness_score": 20,
-        "analysis_summary": "User only says 'I feel sick'.",
-        "follow_up_questions": [
-            "What symptoms do you have?",
-            "How long have you felt this way?",
-        ],
-        "next_action": "ask_followup",
-    })
+    mock_response.content = json.dumps(
+        {
+            "is_sufficient": False,
+            "completeness_score": 20,
+            "analysis_summary": "User only says 'I feel sick'.",
+            "follow_up_questions": [
+                "What symptoms do you have?",
+                "How long have you felt this way?",
+            ],
+            "next_action": "ask_followup",
+        }
+    )
 
-    with patch("app.agents.planner.ChatOpenAI") as MockLLM:
+    with patch("app.agents.planner.get_chat_llm"):
         mock_chain = MagicMock()
         mock_chain.ainvoke = AsyncMock(return_value=mock_response)
 
         from app.agents.planner import PlannerAgent
+
         agent = PlannerAgent()
         agent.llm = MagicMock()
         agent.prompt = MagicMock()
@@ -90,8 +98,9 @@ async def test_planner_invalid_json_fallback():
     mock_response = MagicMock()
     mock_response.content = "This is not JSON at all."
 
-    with patch("app.agents.planner.ChatOpenAI"):
+    with patch("app.agents.planner.get_chat_llm"):
         from app.agents.planner import PlannerAgent
+
         agent = PlannerAgent()
         agent.llm = MagicMock()
         agent.prompt = MagicMock()
@@ -111,30 +120,35 @@ async def test_planner_invalid_json_fallback():
 # RAG Agent Tests
 # ──────────────────────────────────────────────
 
+
 @pytest.mark.asyncio
 async def test_rag_agent_retrieves_and_assesses():
     """RAG Agent should retrieve context and produce structured assessment."""
     mock_response = MagicMock()
-    mock_response.content = json.dumps({
-        "primary_assessment": "Influenza based on fever and body aches.",
-        "differential_diagnoses": [
-            {"condition": "Common Cold", "likelihood": "moderate", "reasoning": "Similar symptoms."},
-        ],
-        "symptom_analysis": "High fever, body aches suggest flu.",
-        "severity": "moderate",
-        "urgency": "urgent",
-        "clinical_findings": ["Fever 101F", "Body aches"],
-    })
+    mock_response.content = json.dumps(
+        {
+            "primary_assessment": "Influenza based on fever and body aches.",
+            "differential_diagnoses": [
+                {
+                    "condition": "Common Cold",
+                    "likelihood": "moderate",
+                    "reasoning": "Similar symptoms.",
+                },
+            ],
+            "symptom_analysis": "High fever, body aches suggest flu.",
+            "severity": "moderate",
+            "urgency": "urgent",
+            "clinical_findings": ["Fever 101F", "Body aches"],
+        }
+    )
 
-    with patch("app.agents.rag.retrieve", return_value="Mock medical knowledge about flu."), \
-         patch("app.agents.rag.ChatOpenAI"):
+    with patch(
+        "app.agents.rag.retrieve", return_value="Mock medical knowledge about flu."
+    ), patch("app.agents.rag.get_chat_llm"):
         from app.agents.rag import RAGAgent
+
         agent = RAGAgent()
-        agent.llm = MagicMock()
-        agent.prompt = MagicMock()
-        mock_chain = MagicMock()
-        mock_chain.ainvoke = AsyncMock(return_value=mock_response)
-        agent.prompt.__or__ = MagicMock(return_value=mock_chain)
+        agent._invoke_llm_with_auto_tools = AsyncMock(return_value=(mock_response, []))
 
         state: CDSSState = {
             "user_input": "Fever and body aches",
@@ -150,35 +164,123 @@ async def test_rag_agent_retrieves_and_assesses():
         assert result["retrieved_context"] == "Mock medical knowledge about flu."
 
 
+@pytest.mark.asyncio
+async def test_rag_agent_auto_tool_loop_executes_requested_tool():
+    """RAG tool loop should execute model-requested MCP tools."""
+    from langchain_core.messages import AIMessage
+    from app.agents.rag import RAGAgent
+
+    class FakeTool:
+        name = "get_disease_rows"
+
+        async def ainvoke(self, args):
+            return json.dumps(
+                {
+                    "rows": [
+                        {
+                            "disease_name": "Influenza",
+                            "severity_group": "moderate",
+                            "severity_level": 2,
+                            "common_symptoms": ["fever", "body aches"],
+                            "triage_recommendation": "urgent if worsening",
+                        }
+                    ]
+                }
+            )
+
+    class FakeToolCallingLLM:
+        def __init__(self):
+            self.calls = 0
+
+        def bind_tools(self, tools):
+            return self
+
+        async def ainvoke(self, messages):
+            self.calls += 1
+            if self.calls == 1:
+                return AIMessage(
+                    content="",
+                    tool_calls=[
+                        {
+                            "name": "get_disease_rows",
+                            "args": {"max_rows": 1},
+                            "id": "call_1",
+                        }
+                    ],
+                )
+            return AIMessage(
+                content=json.dumps(
+                    {
+                        "primary_assessment": "Influenza",
+                        "differential_diagnoses": [],
+                        "symptom_analysis": "Fever and body aches.",
+                        "severity": "moderate",
+                        "urgency": "urgent",
+                        "clinical_findings": ["fever"],
+                    }
+                )
+            )
+
+    prompt_value = MagicMock()
+    prompt_value.to_messages.return_value = []
+    prompt = MagicMock()
+    prompt.invoke.return_value = prompt_value
+
+    agent = RAGAgent.__new__(RAGAgent)
+    agent.llm = FakeToolCallingLLM()
+    agent.prompt = prompt
+    agent.tools = [FakeTool()]
+    agent.tools_by_name = {"get_disease_rows": agent.tools[0]}
+
+    response, tool_messages = await agent._invoke_llm_with_auto_tools(
+        retrieved_context="flu context",
+        patient_context="Current complaint: fever and body aches",
+    )
+
+    assert "Influenza" in response.content
+    assert len(tool_messages) == 1
+    assert "body aches" in tool_messages[0].content
+
+
 # ──────────────────────────────────────────────
 # Analyst Agent Tests
 # ──────────────────────────────────────────────
+
 
 @pytest.mark.asyncio
 async def test_analyst_evaluates_treatment_and_risk():
     """Cost-Effective Agent should produce treatment options and risk assessment."""
     mock_response = MagicMock()
-    mock_response.content = json.dumps({
-        "diagnosis_review": "Diagnosis is valid.",
-        "treatment_options": [
-            {"name": "Rest and fluids", "cost_effectiveness": "high", "estimated_cost_range": "$0-10", "rationale": "Best first step.", "safety_profile": "Safe."},
-        ],
-        "medication_safety": {
-            "interactions": ["NSAIDs with warfarin"],
-            "contraindications": ["Allergy to NSAIDs"],
-            "warnings": ["Monitor for dehydration"],
-        },
-        "risk_assessment": {
-            "overall_risk": "moderate",
-            "emergency_signs": ["Difficulty breathing"],
-            "human_review_recommended": True,
-            "human_review_reason": "Persistent fever",
-        },
-        "alternative_options": ["Herbal remedies"],
-    })
+    mock_response.content = json.dumps(
+        {
+            "diagnosis_review": "Diagnosis is valid.",
+            "treatment_options": [
+                {
+                    "name": "Rest and fluids",
+                    "cost_effectiveness": "high",
+                    "estimated_cost_range": "$0-10",
+                    "rationale": "Best first step.",
+                    "safety_profile": "Safe.",
+                },
+            ],
+            "medication_safety": {
+                "interactions": ["NSAIDs with warfarin"],
+                "contraindications": ["Allergy to NSAIDs"],
+                "warnings": ["Monitor for dehydration"],
+            },
+            "risk_assessment": {
+                "overall_risk": "moderate",
+                "emergency_signs": ["Difficulty breathing"],
+                "human_review_recommended": True,
+                "human_review_reason": "Persistent fever",
+            },
+            "alternative_options": ["Herbal remedies"],
+        }
+    )
 
-    with patch("app.agents.analyst.ChatOpenAI"):
+    with patch("app.agents.analyst.get_chat_llm"):
         from app.agents.analyst import CostEffectiveAgent
+
         agent = CostEffectiveAgent()
         agent.llm = MagicMock()
         agent.prompt = MagicMock()
@@ -208,6 +310,7 @@ async def test_analyst_evaluates_treatment_and_risk():
 # Summary Agent Tests
 # ──────────────────────────────────────────────
 
+
 @pytest.mark.asyncio
 async def test_summary_produces_structured_response():
     """Summary Agent should produce a patient-friendly response with disclaimer."""
@@ -218,8 +321,9 @@ Likely condition: Flu.
 ### ⚕️ Disclaimer
 This AI-generated information is for educational purposes only."""
 
-    with patch("app.agents.summary.ChatOpenAI"):
+    with patch("app.agents.summary.get_chat_llm"):
         from app.agents.summary import SummaryAgent
+
         agent = SummaryAgent()
         agent.llm = MagicMock()
         agent.prompt = MagicMock()
@@ -252,9 +356,11 @@ This AI-generated information is for educational purposes only."""
 # Memory Tests
 # ──────────────────────────────────────────────
 
+
 def test_conversation_memory_add_and_retrieve():
     """ConversationMemory should store and retrieve messages by session."""
     from app.memory.conversation import ConversationMemory
+
     mem = ConversationMemory()
 
     mem.add_message("s1", "user", "Hello")
@@ -269,6 +375,7 @@ def test_conversation_memory_add_and_retrieve():
 def test_conversation_memory_formatted_history():
     """Formatted history should include speaker labels."""
     from app.memory.conversation import ConversationMemory
+
     mem = ConversationMemory()
 
     mem.add_message("s2", "user", "I have a headache")
@@ -283,6 +390,7 @@ def test_conversation_memory_formatted_history():
 def test_conversation_memory_isolation():
     """Different sessions should have isolated histories."""
     from app.memory.conversation import ConversationMemory
+
     mem = ConversationMemory()
 
     mem.add_message("session-a", "user", "Message A")
@@ -296,6 +404,7 @@ def test_conversation_memory_isolation():
 def test_conversation_memory_clear():
     """Clearing a session should remove its history."""
     from app.memory.conversation import ConversationMemory
+
     mem = ConversationMemory()
 
     mem.add_message("s3", "user", "Test")
@@ -307,9 +416,11 @@ def test_conversation_memory_clear():
 # Retriever Tests
 # ──────────────────────────────────────────────
 
+
 def test_retrieve_returns_context():
     """Retriever should return formatted context from FAISS."""
     from app.retrieval.retriever import retrieve
+
     result = retrieve("headache fever", k=2)
     assert isinstance(result, str)
     assert len(result) > 0

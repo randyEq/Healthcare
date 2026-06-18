@@ -4,6 +4,7 @@ Workflow:
   User Input → Planner → [insufficient?] → follow_up (HITL pause)
                         → [sufficient]   → RAG → Analyst → Summary → END
 """
+
 from __future__ import annotations
 
 from langgraph.graph import StateGraph, END
@@ -21,7 +22,9 @@ from app.graph.nodes import (
 
 def _route_after_planner(state: CDSSState) -> str:
     """Conditional edge: route to RAG if sufficient, followup if not."""
-    if state.get("next_action") == "ask_followup" or not state.get("is_sufficient", False):
+    if state.get("next_action") == "ask_followup" or not state.get(
+        "is_sufficient", False
+    ):
         logger.info("[Router] → followup (insufficient info)")
         return "followup"
     logger.info("[Router] → rag (proceed to assessment)")
@@ -43,18 +46,18 @@ def build_workflow() -> StateGraph:
     graph.set_entry_point("planner")
 
     # Planner → conditional routing
-    graph.add_conditional_edges(
-        "planner",
-        _route_after_planner,
-        {
-            "followup": "followup",
-            "rag": "rag",
-        },
-    )
+    # graph.add_conditional_edges(
+    #     "planner",
+    #     _route_after_planner,
+    #     {
+    #         "followup": "followup",
+    #         "rag": "rag",
+    #     },
+    # )
 
     # followup → END (pause for user response)
-    graph.add_edge("followup", END)
-
+    # graph.add_edge("followup", END)
+    graph.add_edge("planner", "rag")
     # Linear pipeline after RAG
     graph.add_edge("rag", "analyst")
     graph.add_edge("analyst", "summary")

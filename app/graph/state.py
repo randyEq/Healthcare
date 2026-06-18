@@ -1,4 +1,5 @@
 """LangGraph state schema for the CDSS workflow."""
+
 from __future__ import annotations
 
 from typing import TypedDict, Literal
@@ -45,6 +46,10 @@ class CDSSState(TypedDict, total=False):
     """routine | urgent | emergency."""
     clinical_findings: list[str]
     """Key clinical findings."""
+    disease_severity_data: list[dict]
+    """Disease rows loaded from patientcare.disease."""
+    disease_symptom_matches: list[dict]
+    """Diseases whose common symptoms matched the user input."""
 
     # ── Analyst Output ──
     diagnosis_review: str

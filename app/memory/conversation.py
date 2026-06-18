@@ -1,4 +1,5 @@
 """Conversation memory management for CDSS sessions."""
+
 from __future__ import annotations
 
 from collections import defaultdict
@@ -20,11 +21,13 @@ class ConversationMemory:
 
     def add_message(self, session_id: str, role: str, content: str) -> None:
         """Append a message to the session's history."""
-        self._store[session_id].append({
-            "role": role,
-            "content": content,
-            "ts": datetime.now(timezone.utc).isoformat(),
-        })
+        self._store[session_id].append(
+            {
+                "role": role,
+                "content": content,
+                "ts": datetime.now(timezone.utc).isoformat(),
+            }
+        )
         logger.debug(f"[Memory] session={session_id} role={role} added")
 
     def get_history(self, session_id: str) -> list[dict]:
