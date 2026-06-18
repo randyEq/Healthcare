@@ -27,13 +27,31 @@ from app.config import settings
 from app.graph.workflow import build_workflow
 from app.guardrails import apply_output_guardrails, screen_input
 from app.memory.conversation import memory
-from app.sql_tool import execute_sql, execute_write
+from app.sql_tool import (
+    database_config_summary,
+    execute_sql,
+    execute_write,
+    is_database_configured,
+    test_database_connection,
+)
 
 
 # ── Lifecycle ──
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("[App] Starting Healthcare CDSS...")
+    if is_database_configured():
+        logger.info(
+            "[App] Database settings detected target={}",
+            database_config_summary(),
+        )
+        if test_database_connection():
+            logger.info("[App] Database connection ready")
+        else:
+            logger.error("[App] Database connection failed; patient login may fail")
+    else:
+        logger.warning("[App] Database settings incomplete; skipping DB startup check")
+
     # Pre-build the workflow graph (agents are instantiated at module load)
     app.state.workflow = build_workflow()
     logger.info("[App] LangGraph workflow ready")
