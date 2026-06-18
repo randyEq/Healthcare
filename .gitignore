@@ -43,3 +43,4 @@ ingestion/documents/*
 
 # Model cache
 .cache/
+.vercel
