@@ -9,20 +9,27 @@ from __future__ import annotations
 from pathlib import Path
 from functools import lru_cache
 
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
 from loguru import logger
 
 from app.config import settings
 
 
 @lru_cache(maxsize=1)
-def get_embeddings() -> HuggingFaceEmbeddings:
+def get_embeddings():
     """Create the local HuggingFace embedding model.
 
     Uses sentence-transformers/all-MiniLM-L6-v2 by default — fast, lightweight,
     and runs locally (no API calls).
     """
+    try:
+        from langchain_huggingface import HuggingFaceEmbeddings
+    except ImportError as exc:
+        logger.warning(
+            "[Retriever] langchain-huggingface is unavailable; retrieval disabled: {}",
+            exc,
+        )
+        return None
+
     model_name = settings.embedding_model_name
     logger.info(f"[Retriever] Loading embedding model: {model_name}")
     return HuggingFaceEmbeddings(
@@ -33,7 +40,7 @@ def get_embeddings() -> HuggingFaceEmbeddings:
 
 
 @lru_cache(maxsize=1)
-def load_vector_store() -> FAISS | None:
+def load_vector_store():
     """Load the FAISS index from disk (cached at module level).
 
     Returns None if no index exists yet — caller should handle gracefully.
@@ -44,7 +51,12 @@ def load_vector_store() -> FAISS | None:
         return None
 
     try:
+        from langchain_community.vectorstores import FAISS
+
         embeddings = get_embeddings()
+        if embeddings is None:
+            return None
+
         store = FAISS.load_local(
             folder_path=str(index_path),
             embeddings=embeddings,

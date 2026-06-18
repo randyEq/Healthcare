@@ -93,7 +93,7 @@ def get_disease_rows(max_rows: int = MAX_ROWS_DEFAULT) -> dict[str, Any]:
         severity_level,
         common_symptoms,
         triage_recommendation
-    FROM patientcare.disease
+    FROM disease
     """
     rows = execute_sql(query)
     return _format_tool_result(rows, _clamp_max_rows(max_rows))

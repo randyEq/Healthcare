@@ -25,8 +25,15 @@
 
   let ws = null;
   let isProcessing = false;
+  let transport = "rest";
+  let sessionId =
+    sessionStorage.getItem("chatSessionId") ||
+    (crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
   let patientToken = sessionStorage.getItem("patientToken") || "";
   let currentPatient = readStoredPatient();
+  sessionStorage.setItem("chatSessionId", sessionId);
 
   // ── WebSocket ──
   function connect() {
@@ -37,6 +44,7 @@
 
     ws.onopen = function () {
       console.log("[WS] Connected");
+      transport = "websocket";
       updateStatus("Connected", "connected");
     };
 
@@ -47,13 +55,14 @@
 
     ws.onerror = function (error) {
       console.error("[WS] Error:", error);
-      updateStatus("Connection error", "error");
+      transport = "rest";
+      updateStatus("REST fallback", "connected");
     };
 
     ws.onclose = function () {
-      console.log("[WS] Disconnected — reconnecting...");
-      updateStatus("Reconnecting...", "disconnected");
-      setTimeout(connect, 3000);
+      console.log("[WS] Disconnected; using REST fallback.");
+      transport = "rest";
+      updateStatus("REST fallback", "connected");
     };
   }
 
@@ -143,7 +152,7 @@
   }
 
   // ── Send ──
-  function sendMessage() {
+  async function sendMessage() {
     const text = messageInput.value.trim();
     if (!text || isProcessing) return;
 
@@ -153,7 +162,25 @@
     isProcessing = true;
     disableInput();
 
-    ws.send(JSON.stringify({ message: text, patient_token: patientToken }));
+    if (transport === "websocket" && ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ message: text, patient_token: patientToken }));
+      return;
+    }
+
+    showTyping();
+    try {
+      const data = await apiRequest("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          message: text,
+          session_id: sessionId,
+          patient_token: patientToken,
+        }),
+      });
+      handleMessage({ type: "response", ...data });
+    } catch (error) {
+      handleMessage({ type: "error", message: error.message });
+    }
   }
 
   function disableInput() {

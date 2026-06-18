@@ -14,17 +14,44 @@ from app.agents.rag import RAGAgent
 from app.agents.analyst import CostEffectiveAgent
 from app.agents.summary import SummaryAgent
 
-# Singleton agent instances
-_planner = PlannerAgent()
-_rag = RAGAgent()
-_analyst = CostEffectiveAgent()
-_summary = SummaryAgent()
+_planner: PlannerAgent | None = None
+_rag: RAGAgent | None = None
+_analyst: CostEffectiveAgent | None = None
+_summary: SummaryAgent | None = None
+
+
+def _planner_agent() -> PlannerAgent:
+    global _planner
+    if _planner is None:
+        _planner = PlannerAgent()
+    return _planner
+
+
+def _rag_agent() -> RAGAgent:
+    global _rag
+    if _rag is None:
+        _rag = RAGAgent()
+    return _rag
+
+
+def _analyst_agent() -> CostEffectiveAgent:
+    global _analyst
+    if _analyst is None:
+        _analyst = CostEffectiveAgent()
+    return _analyst
+
+
+def _summary_agent() -> SummaryAgent:
+    global _summary
+    if _summary is None:
+        _summary = SummaryAgent()
+    return _summary
 
 
 async def planner_node(state: CDSSState) -> CDSSState:
     """Planner agent node."""
     logger.info("[Node] ═══ Planner ═══")
-    return await _planner.run(state)
+    return await _planner_agent().run(state)
 
 
 async def followup_node(state: CDSSState) -> CDSSState:
@@ -57,16 +84,16 @@ async def followup_node(state: CDSSState) -> CDSSState:
 async def rag_node(state: CDSSState) -> CDSSState:
     """RAG / Patient Assessment node."""
     logger.info("[Node] ═══ RAG Agent (Patient Assessment) ═══")
-    return await _rag.run(state)
+    return await _rag_agent().run(state)
 
 
 async def analyst_node(state: CDSSState) -> CDSSState:
     """Cost-Effective Analysis + Risk Evaluation node."""
     logger.info("[Node] ═══ Analyst (Cost-Effectiveness & Risk) ═══")
-    return await _analyst.run(state)
+    return await _analyst_agent().run(state)
 
 
 async def summary_node(state: CDSSState) -> CDSSState:
     """Summary node."""
     logger.info("[Node] ═══ Summary ═══")
-    return await _summary.run(state)
+    return await _summary_agent().run(state)

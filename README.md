@@ -122,6 +122,36 @@ python run.py
 
 The app will be available at `http://localhost:8000`
 
+## Vercel Deployment
+
+This repository includes `vercel.json` and `.python-version` for Vercel's
+Python runtime. Deploy from GitHub, then set these environment variables in the
+Vercel project dashboard:
+
+```env
+OPENAI_API_KEY=your_openai_key
+OPENAI_MODEL=gpt-4.1-nano
+DB_HOST=box4355.bluehost.com
+DB_PORT=3306
+DB_NAME=cfiearmy_interviewsupport
+DB_USER=cfiearmy_interviewsupport
+DB_PASSWORD=your_database_password
+SESSION_SECRET=generate_a_long_random_secret
+LANGSMITH_TRACING=false
+```
+
+For LangSmith monitoring, also set:
+
+```env
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=your_langsmith_api_key
+LANGSMITH_PROJECT=healthcare-cdss
+```
+
+The Vercel build installs a slim runtime dependency set. Local FAISS retrieval
+is optional on Vercel; if no FAISS index or embedding packages are bundled, the
+chatbot falls back to general LLM reasoning plus the MySQL disease tools.
+
 ## 📄 Adding Your Own Medical PDFs
 
 1. Place PDF files in the `ingestion/documents/` folder
@@ -152,6 +182,7 @@ All configuration is via environment variables (`.env` file):
 | `FAISS_INDEX_PATH`     | Path to FAISS index | `/workspace/vector_db`                    |
 | `APP_HOST`             | Server host         | `0.0.0.0`                                 |
 | `APP_PORT`             | Server port         | `8000`                                    |
+| `SESSION_SECRET`       | Secret for signed patient session tokens | -                       |
 | `LANGSMITH_TRACING`    | Enable LangSmith monitoring | `false`                         |
 | `LANGSMITH_API_KEY`    | LangSmith API key   | -                                         |
 | `LANGSMITH_PROJECT`    | LangSmith project name | `healthcare-cdss`                      |

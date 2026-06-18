@@ -207,6 +207,6 @@ def get_disease_severity() -> list[dict[str, Any]]:
         disease_name,
         severity_group,
         severity_level
-    FROM patientcare.disease;
+    FROM disease;
     """
     return execute_sql(query)

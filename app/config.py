@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     app_port: int = Field(default=8000, alias="APP_PORT")
     app_env: str = Field(default="development", alias="APP_ENV")
     app_debug: bool = Field(default=True, alias="APP_DEBUG")
+    session_secret: Optional[str] = Field(default=None, alias="SESSION_SECRET")
 
     # Database (disabled by default for local development)
     enable_db: bool = Field(default=False, alias="ENABLE_DB")

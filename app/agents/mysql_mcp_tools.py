@@ -1,4 +1,4 @@
-"""LangChain tool wrappers around the MySQL MCP server."""
+"""LangChain tool wrappers around safe MySQL helper functions."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import json
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
 
-from app.mcp_mysql_client import call_mysql_tool
+from app.mcp_mysql_server import get_disease_rows
 
 
 class DiseaseRowsInput(BaseModel):
@@ -22,8 +22,8 @@ class DiseaseRowsInput(BaseModel):
 
 
 def _get_disease_rows(max_rows: int = 500) -> str:
-    """Fetch disease severity, symptom, and triage rows from MySQL via MCP."""
-    result = call_mysql_tool("get_disease_rows", {"max_rows": max_rows})
+    """Fetch disease severity, symptom, and triage rows from MySQL."""
+    result = get_disease_rows(max_rows=max_rows)
     return json.dumps(result, default=str)
 
 

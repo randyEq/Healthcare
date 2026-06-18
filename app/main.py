@@ -10,7 +10,10 @@ Provides:
 from __future__ import annotations
 
 import json
-import secrets
+import base64
+import hashlib
+import hmac
+import time
 import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -69,7 +72,7 @@ _TEMPLATES_DIR = str(_BASE_DIR / "templates")
 
 app.mount("/static", StaticFiles(directory=_STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=_TEMPLATES_DIR)
-patient_sessions: dict[str, dict[str, Any]] = {}
+TOKEN_TTL_SECONDS = 60 * 60 * 8
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -88,10 +91,74 @@ def _error(message: str, status_code: int = 400) -> JSONResponse:
     return JSONResponse({"error": message}, status_code=status_code)
 
 
+def _token_secret() -> bytes:
+    secret = (
+        settings.session_secret
+        or settings.openai_api_key
+        or settings.langsmith_api_key
+        or settings.db_password
+        or "healthcare-cdss-development-secret"
+    )
+    return secret.encode("utf-8")
+
+
+def _b64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).decode("ascii").rstrip("=")
+
+
+def _b64url_decode(data: str) -> bytes:
+    padding = "=" * (-len(data) % 4)
+    return base64.urlsafe_b64decode(data + padding)
+
+
+def _sign_patient_session(session: dict[str, Any]) -> str:
+    payload = {
+        **session,
+        "iat": int(time.time()),
+        "exp": int(time.time()) + TOKEN_TTL_SECONDS,
+    }
+    payload_json = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode(
+        "utf-8"
+    )
+    encoded_payload = _b64url_encode(payload_json)
+    signature = hmac.new(
+        _token_secret(),
+        encoded_payload.encode("ascii"),
+        hashlib.sha256,
+    ).digest()
+    return f"{encoded_payload}.{_b64url_encode(signature)}"
+
+
 def _session_for_token(token: str | None) -> dict[str, Any] | None:
     if not token:
         return None
-    return patient_sessions.get(token)
+
+    try:
+        encoded_payload, encoded_signature = token.split(".", 1)
+        expected_signature = hmac.new(
+            _token_secret(),
+            encoded_payload.encode("ascii"),
+            hashlib.sha256,
+        ).digest()
+        actual_signature = _b64url_decode(encoded_signature)
+        if not hmac.compare_digest(actual_signature, expected_signature):
+            logger.warning("[PatientSession] Invalid token signature")
+            return None
+
+        payload = json.loads(_b64url_decode(encoded_payload).decode("utf-8"))
+        if int(payload.get("exp", 0)) < int(time.time()):
+            logger.info("[PatientSession] Token expired")
+            return None
+
+        return {
+            "patient_id": int(payload["patient_id"]),
+            "patient_name": payload.get("patient_name", "Patient"),
+            "username": payload.get("username", ""),
+            "email": payload.get("email", ""),
+        }
+    except Exception as exc:
+        logger.warning("[PatientSession] Could not parse token: {}", exc)
+        return None
 
 
 def _patient_history(patient_id: int) -> list[dict[str, Any]]:
@@ -175,13 +242,13 @@ async def patient_login(payload: dict):
         return _error("Invalid credentials or inactive login.", 401)
 
     user = rows[0]
-    token = secrets.token_urlsafe(32)
-    patient_sessions[token] = {
+    patient_session = {
         "patient_id": int(user["patient_id"]),
         "patient_name": user["patient_name"],
         "username": user["username"],
         "email": user["email"],
     }
+    token = _sign_patient_session(patient_session)
 
     try:
         execute_write(
@@ -193,7 +260,7 @@ async def patient_login(payload: dict):
 
     return {
         "token": token,
-        "patient": patient_sessions[token],
+        "patient": patient_session,
         "history": _patient_history(int(user["patient_id"])),
     }
 
@@ -201,8 +268,6 @@ async def patient_login(payload: dict):
 @app.post("/api/patient/logout")
 async def patient_logout(payload: dict):
     """End a patient UI session."""
-    token = str(payload.get("token", "")).strip()
-    patient_sessions.pop(token, None)
     return {"ok": True}
 
 
